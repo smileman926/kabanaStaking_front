@@ -1,0 +1,60 @@
+@import "./UI/styles/mixins";
+@import "./UI/styles/variables";
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"), url(./UI/styles/fonts/Roboto.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto-Medium";
+  src: local("Roboto-Medium"),
+    url(./UI/styles/fonts/Roboto-Medium.ttf) format("truetype");
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html {
+  box-sizing: border-box;
+  // font-size: 62.5%; // 10px/16px = 62.5% -> 1rem = 10px
+  font-size: 65.5%;
+  background-color: var(--color-white);
+  color: var(--color-black);
+
+  @include respond(tab-port) {
+    font-size: 70%;
+  }
+}
+
+body {
+  height: 100vh;
+
+  font-family: Roboto;
+
+  color: var(--color-black);
+
+  // box-sizing: border-box;
+
+  // @include respond(tab-port) {
+  //   background-color: var(--color-gold);
+  // }
+  // @include respond(tab-land) {
+  //   background-color: var(--color-blue-1);
+  // }
+  // @include respond(desktop) {
+  //   background-color: var(--color-green-1);
+  // }
+  // @include respond(big-desktop) {
+  //   background-color: var(--color-red-1);
+  // }
+}

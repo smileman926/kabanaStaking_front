@@ -1,0 +1,77 @@
+.nft {
+  width: 40rem;
+  height: 23rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  font-family: Roboto-Medium;
+
+  padding: 2rem 3rem;
+
+  &__title {
+    height: 20%;
+    p {
+      font-size: 2.25rem;
+    }
+  }
+  &__content {
+    height: 80%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    &_col {
+      height: 100%;
+      width: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      font-size: 1.5rem;
+
+      &_whiteRow {
+        width: 90%;
+        height: 2.5rem;
+        background-color: var(--color-white);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 0 1rem;
+        opacity: 0.85;
+        p {
+          font-size: 1.5rem;
+        }
+      }
+
+      &_grayRow {
+        width: 90%;
+        height: 2.5rem;
+        background-color: var(--color-gray-1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 0 1rem;
+        opacity: 0.85;
+        p {
+          font-size: 1.5rem;
+        }
+      }
+
+      &_unstake {
+        width: 100%;
+        height: 2.5rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

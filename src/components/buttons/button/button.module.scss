@@ -1,0 +1,20 @@
+.button {
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 1.5rem;
+  color: var(--color-black);
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: inherit;
+  background: var(--color-red-3);
+  padding: 0.15rem 0.5rem;
+  text-decoration: none;
+  margin: 0.15rem;
+  border: 3px solid var(--color-white);
+  cursor: pointer;
+  box-shadow: 0px 4px 4px 2px rgba(0, 0, 0, 0.44);
+}
+
+.button:hover {
+  text-decoration: none;
+}

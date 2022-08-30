@@ -1,0 +1,59 @@
+.lp {
+  width: 40rem;
+  height: 23rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  font-family: Roboto-Medium;
+
+  padding: 2rem 3rem;
+
+  &__title {
+    height: 20%;
+    p {
+      font-size: 2.25rem;
+    }
+  }
+  &__content {
+    height: 80%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    &_whiteRow {
+      width: 90%;
+      height: 3rem;
+      background-color: var(--color-white);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0 1rem;
+      opacity: 0.85;
+      p {
+        font-size: 1.5rem;
+      }
+    }
+
+    &_grayRow {
+      width: 90%;
+      height: 3rem;
+      background-color: var(--color-gray-1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0 1rem;
+      opacity: 0.85;
+      p {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
