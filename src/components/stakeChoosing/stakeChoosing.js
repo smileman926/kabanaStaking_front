@@ -5,8 +5,13 @@ import Nft from "./utilities/nft/nft";
 const StakeChoosing = () => {
   return (
     <div className={classes.stakeChoosing}>
-      <Lp />
-      <Nft />
+      <div className={classes.stakeChoosing__lp}>
+        <Lp />
+      </div>
+
+      <div className={classes.stakeChoosing__nft}>
+        <Nft />
+      </div>
     </div>
   );
 };

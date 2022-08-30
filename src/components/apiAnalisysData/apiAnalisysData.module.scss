@@ -1,3 +1,5 @@
+@import "../../UI/styles/mixins";
+
 .apiAnalisysData {
   height: 18rem;
   width: 40rem;
@@ -17,6 +19,16 @@
 
   padding: 2rem 3rem;
 
+  @include respond(phone) {
+    margin-top: 0;
+    border-radius: 1rem;
+    box-shadow: 0px 4px 12px 2px rgba(255, 255, 255, 0.31);
+
+    padding: 1rem;
+    width: 30rem;
+    height: 15rem;
+  }
+
   &__title {
     height: 20%;
     width: 100%;
@@ -26,7 +38,14 @@
     font-family: Roboto-Medium;
 
     margin-bottom: 1rem;
+
+    @include respond(phone) {
+      font-size: 1.5rem;
+      font-family: Roboto;
+      padding-right: 1rem;
+    }
   }
+
   &__list {
     height: 80%;
     width: 100%;
@@ -39,6 +58,10 @@
       font-family: Roboto-Medium;
 
       margin: 0.25rem 0;
+
+      @include respond(phone) {
+        font-size: 1.25rem;
+      }
     }
   }
 }

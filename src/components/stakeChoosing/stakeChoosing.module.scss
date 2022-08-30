@@ -1,3 +1,5 @@
+@import "../../UI/styles/mixins";
+
 .stakeChoosing {
   height: 100%;
   width: 100%;
@@ -7,4 +9,35 @@
   justify-content: center;
 
   padding: 5rem;
+
+  @include respond(phone) {
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  &__lp {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include respond(phone) {
+      order: 2;
+    }
+  }
+
+  &__nft {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include respond(phone) {
+      order: 1;
+    }
+  }
 }

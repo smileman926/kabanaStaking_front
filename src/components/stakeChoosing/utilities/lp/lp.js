@@ -14,7 +14,7 @@ const Lp = () => {
             <p>YOU HAVE ... LP TOKENS</p>
           </div>
           <div className={classes.lp__content_whiteRow}>
-            <p>HOW MUCH TO STAKE...LP TOKENS</p>
+            <p>HOW MUCH TO STAKE ... LP TOKENS</p>
           </div>
           <div className={classes.lp__content_grayRow}>
             <p>

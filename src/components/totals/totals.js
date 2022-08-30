@@ -1,6 +1,13 @@
+import { useState } from "react";
 import classes from "./totals.module.scss";
 
 const Totals = () => {
+  const [activePool, setActivePool] = useState("NFT");
+
+  const onChangePoolClick = (poolType) => {
+    setActivePool(poolType);
+  };
+
   return (
     <div className={classes.totals}>
       <div className={classes.totals__rowOne}>
@@ -18,10 +25,20 @@ const Totals = () => {
         </div>
       </div>
       <div className={classes.totals__rowTwo}>
-        <div className={classes.activePool}>
+        <div
+          className={activePool === "NFT" ? classes.activePool : classes.pool}
+          onClick={() => {
+            onChangePoolClick("NFT");
+          }}
+        >
           <p>NFT POOL</p>
         </div>
-        <div className={classes.pool}>
+        <div
+          className={activePool === "TOKEN" ? classes.activePool : classes.pool}
+          onClick={() => {
+            onChangePoolClick("TOKEN");
+          }}
+        >
           <p>TOKEN POOL</p>
         </div>
       </div>
