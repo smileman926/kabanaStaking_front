@@ -28,7 +28,8 @@
 
       @include respond(phone) {
         font-size: 2rem;
-        margin-left: 2rem;
+        // margin-left: 2rem;
+        text-align: center;
       }
     }
   }

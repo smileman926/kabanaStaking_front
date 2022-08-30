@@ -7,7 +7,7 @@ const Lp = () => {
     <StakeCard>
       <div className={classes.lp}>
         <div className={classes.lp__title}>
-          <p>STAKE LP</p>
+          <p>STAKE LP - MINE DNUTS</p>
         </div>
         <div className={classes.lp__content}>
           <div className={classes.lp__content_grayRow}>
@@ -24,9 +24,14 @@ const Lp = () => {
             </p>
           </div>
           <div
-            style={{ alignItems: "flex-end" }}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
             className={classes.lp__content_whiteRow}
           >
+            <Button color={"var(--color-green-1)"}> CLAIM </Button>
             <Button>STAKE</Button>
           </div>
         </div>

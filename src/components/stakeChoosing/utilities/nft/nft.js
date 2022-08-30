@@ -7,7 +7,7 @@ const Nft = () => {
     <StakeCard>
       <div className={classes.nft}>
         <div className={classes.nft__title}>
-          <p>STAKE NFT - TOKEN MINE</p>
+          <p>STAKE NFT - MINE DNUTS</p>
         </div>
         <div className={classes.nft__content}>
           <div className={classes.nft__content_col}>
@@ -28,24 +28,27 @@ const Nft = () => {
               <>#44</>
               <Button>APROVE</Button>
             </div>
+            <div className={classes.nft__content_col_claim}>
+              <Button color={"var(--color-green-1)"}> CLAIM </Button>
+            </div>
           </div>
           <div className={classes.nft__content_col}>
             <>YOU STAKED</>{" "}
             <div className={classes.nft__content_col_whiteRow}>
               <>#314</>
-              <Button>APROVE</Button>
+              <Button>UNSTAKE</Button>
             </div>
             <div className={classes.nft__content_col_grayRow}>
               <>#69</>
-              <Button>APROVE</Button>
+              <Button>UNSTAKE</Button>
             </div>
             <div className={classes.nft__content_col_whiteRow}>
               <>#5</>
-              <Button>APROVE</Button>
+              <Button>UNSTAKE</Button>
             </div>
             <div className={classes.nft__content_col_grayRow}>
               <>#3333</>
-              <Button>APROVE</Button>
+              <Button>UNSTAKE</Button>
             </div>
             <div className={classes.nft__content_col_unstake}>
               <Button> UNSTAKE ALL </Button>

@@ -1,13 +1,7 @@
 import classes from "./oldPaper.module.scss";
 
 const OldPaper = () => {
-  const rows = [
-    "Awakened Mushroom",
-    "Cabana Club Coin",
-    "dNuts",
-    "Offers",
-    "Wins",
-  ];
+  const rows = ["Mushroom", "Club Coin", "dNuts", "Offers", "Wins"];
 
   return (
     <div className={classes.oldPaper}>
@@ -17,7 +11,7 @@ const OldPaper = () => {
             rows.map((item) => {
               return (
                 <div key={item} className={classes.row}>
-                  <p>{item} : </p>
+                  <p>{item}: </p>
                 </div>
               );
             })}
