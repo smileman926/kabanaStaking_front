@@ -21,6 +21,19 @@ export const getApproved = async (
 ) => {
   try {
     const tx = await grigochki.getApproved(tokenId, options);
+    // const approveTxUnsigned = await grigochki.populateTransaction.walletOfOwner("SOME_ADDRESS", "1000000");
+
+    return tx;
+  } catch (e) {}
+};
+
+export const ownerOf = async (
+  grigochki: IERC721,
+  tokenId: number,
+  options: any
+) => {
+  try {
+    const tx = await grigochki.ownerOf(tokenId, options);
     return tx;
   } catch (e) {}
 };

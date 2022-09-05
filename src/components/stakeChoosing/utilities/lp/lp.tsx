@@ -9,8 +9,12 @@ import useLPStakingContract from "../../../../chain/hooks/useLPStakingContract";
 import {
   etherToWei,
   getTransactionOptions,
+  weiToEther,
 } from "../../../../chain/tools/chain-utils";
-import { LP_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
+import {
+  LP_STAKING_CONTRACT_ADDRESS,
+  LP_TOKEN_ADDRESS,
+} from "../../../../chain/constances";
 
 const Lp = () => {
   const { account } = useWeb3React<Web3Provider>();
@@ -18,25 +22,55 @@ const Lp = () => {
   const [userLPBalance, setUserLPBalance] = useState(0);
   const LpToken = useLPTokenContract();
   const LPStakeContract = useLPStakingContract();
+  const [stakeButtonText, setStakeButtonText] = useState("APPROVE");
 
   const [stakeInfo, setStakeInfo] = useState<{
     period: number;
     amount: number;
-  }>({ amount: 0, period: 0 });
+    allowance: number;
+  }>({ amount: 0, period: 0, allowance: 0 });
 
   useEffect(() => {
     if (account && LpToken) {
       getUserLP();
+      getUserAllowance();
     }
   }, [account]);
 
+  const getUserAllowance = async () => {
+    const allowance = await LpToken!.allowance(
+      account!,
+      LP_STAKING_CONTRACT_ADDRESS
+    );
+    setStakeInfo({ ...stakeInfo, allowance: Number(weiToEther(allowance)) });
+  };
   const getUserLP = async () => {
     const balance = await LpToken!.balanceOf(account!);
-    setUserLPBalance(Number(balance));
+
+    // weiToEther(balance)
+    setUserLPBalance(Number(weiToEther(balance)));
   };
 
+  const checkStakeButtonText = (): boolean => {
+    console.log(stakeInfo.amount > stakeInfo.allowance);
+    if (stakeInfo.amount > stakeInfo.allowance) {
+      setStakeButtonText("APPROVE");
+      return false;
+    } else {
+      setStakeButtonText("STAKE");
+      return true;
+    }
+  };
+
+  useEffect(() => {
+    checkStakeButtonText();
+  }, [stakeInfo]);
   const onEnterStakingAmount = (value: number) => {
-    setStakeInfo({ ...stakeInfo, amount: value });
+    if (value > stakeInfo.allowance) {
+      setStakeInfo({ ...stakeInfo, amount: value });
+    } else {
+      setStakeInfo({ ...stakeInfo, amount: value });
+    }
   };
 
   const onSelectPeriodClick = (value: number) => {
@@ -44,16 +78,22 @@ const Lp = () => {
   };
 
   const doStake = async (duration: number) => {
-    const t = await LpToken?.approve(
-      LP_STAKING_CONTRACT_ADDRESS,
-      etherToWei(stakeInfo.amount)
-    );
-    await t?.wait();
-    LPStakeContract?.deposit(
-      etherToWei(stakeInfo.amount),
-      duration,
-      await getTransactionOptions(account!)
-    );
+    const check = checkStakeButtonText();
+    console.log("check", check);
+    if (check) {
+      LPStakeContract?.deposit(
+        etherToWei(stakeInfo.amount),
+        duration,
+        await getTransactionOptions(account!, stakeInfo.amount)
+      );
+    } else {
+      const t = await LpToken?.approve(
+        LP_STAKING_CONTRACT_ADDRESS,
+        etherToWei(stakeInfo.amount)
+      );
+      await t?.wait();
+      getUserAllowance();
+    }
   };
   const onStakeClick = async () => {
     if (stakeInfo.amount && stakeInfo.period) {
@@ -74,6 +114,8 @@ const Lp = () => {
         default:
           break;
       }
+    } else {
+      alert("Please enter amount and select period");
     }
   };
 
@@ -124,7 +166,7 @@ const Lp = () => {
               {" "}
               CLAIM{" "}
             </Button>
-            <Button onClick={() => onStakeClick()}>STAKE</Button>
+            <Button onClick={() => onStakeClick()}>{stakeButtonText}</Button>
           </div>
         </div>
       </div>

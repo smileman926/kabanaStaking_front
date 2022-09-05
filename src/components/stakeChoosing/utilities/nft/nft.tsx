@@ -11,6 +11,7 @@ import { NFT_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
 import { NFTItem } from "../../../../chain/interfaces/nft-item.interface";
 import {
   claim,
+  NFTM,
   stake,
   unstakeAll,
 } from "../../../../chain/hooks/useStakingContractFunctions";
@@ -26,9 +27,16 @@ const Nft = () => {
   useEffect(() => {
     if (account && NFTContract) {
       getUserNFTs();
+      if (StakingContract) {
+        NFTM(StakingContract, account);
+      }
     }
   }, [account, NFTContract]);
 
+  const resetNFTs = () => {
+    setNFTs([]);
+    getUserNFTs();
+  };
   const getUserNFTs = async () => {
     const userNFTs = await getNftsForOwner(NFTContract!, account!);
     if (userNFTs) {
@@ -44,7 +52,6 @@ const Nft = () => {
         NFT_STAKING_CONTRACT_ADDRESS,
         tokenId
       );
-      console.log(tx);
     }
   };
 
@@ -56,24 +63,25 @@ const Nft = () => {
           [Number(nft.tokenId)],
           account!
         );
-        getUserNFTs();
+        resetNFTs();
       }
     } else {
-      approveNFT(Number(nft.tokenId));
+      await approveNFT(Number(nft.tokenId));
+      resetNFTs();
     }
   };
 
   const onClaimClick = async () => {
     if (StakingContract) {
       const tx = await claim(StakingContract!, account!);
-      getUserNFTs();
+      resetNFTs();
     }
   };
 
   const onUnstakeAllClick = async () => {
     if (StakingContract) {
       const tx = await unstakeAll(StakingContract!, account!);
-      getUserNFTs();
+      resetNFTs();
     }
   };
 

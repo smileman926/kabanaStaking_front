@@ -2,7 +2,11 @@ import { Alchemy, Network, OwnedNft } from "alchemy-sdk";
 import { BigNumber, ethers } from "ethers";
 import { GRIGOCHKI_ADDRESS, NFT_STAKING_CONTRACT_ADDRESS } from "../constances";
 import { IERC721 } from "../contracts/typechains/IERC721";
-import { approve, getApproved } from "../hooks/useGrigochkiTokenFunctions";
+import {
+  approve,
+  getApproved,
+  ownerOf,
+} from "../hooks/useGrigochkiTokenFunctions";
 import { NFTItem } from "../interfaces/nft-item.interface";
 
 export const getNftsForOwner = async (
@@ -25,12 +29,19 @@ export const getNftsForOwner = async (
     ) as NFTItem[];
 
     for await (const item of filtered) {
+      console.log("item", item);
+
       const tx = await getApproved(
         gToken!,
         Number(item.tokenId),
         await getTransactionOptions(account)
       );
-      if (tx == NFT_STAKING_CONTRACT_ADDRESS) {
+      console.log("tx", tx);
+      console.log(
+        "tx",
+        tx?.toLowerCase() == NFT_STAKING_CONTRACT_ADDRESS.toLowerCase()
+      );
+      if (tx?.toLowerCase() == NFT_STAKING_CONTRACT_ADDRESS.toLowerCase()) {
         item.isApproved = true;
       } else {
         item.isApproved = false;
@@ -96,21 +107,19 @@ export const getTransactionOptions = async (
 ): Promise<Object> => {
   const feeData = await getProvider().getFeeData();
   const n = await getProvider().getTransactionCount(account);
-  const gasPrice = Number(feeData.gasPrice) + 10000;
-  console.log("gasPrice", gasPrice);
-  console.log("feeData.maxFeePerGas", Number(feeData.maxFeePerGas));
-  console.log("gasPrice", gasPrice);
+  const gasPrice = Number(feeData.gasPrice) + 1000000000;
+  const gasLimit = 200000;
   let overrides = {
-    gasLimit: 200000,
+    gasLimit: gasLimit,
     gasPrice: gasPrice,
-    // value: this.etherToWei(0.001),
     nonce: n,
-    // chainId: 137
   };
 
+  console.log("getTransactionOptions value", value);
   if (value != 0) {
-    const pure = etherToWei(value).add(200000 * gasPrice);
+    const pure = Number(etherToWei(value)) + gasLimit * gasPrice;
     overrides["value"] = pure;
+    console.log("getTransactionOptions", pure);
   }
 
   return overrides;
