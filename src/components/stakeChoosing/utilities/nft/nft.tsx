@@ -5,8 +5,14 @@ import React, { useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import useClubTokenContract from "../../../../chain/hooks/useGrigochkiTokenContract";
-import { getNftsForOwner } from "../../../../chain/tools/chain-utils";
-import { approve } from "../../../../chain/hooks/useGrigochkiTokenFunctions";
+import {
+  getNftsForOwner,
+  getTransactionOptions,
+} from "../../../../chain/tools/chain-utils";
+import {
+  approve,
+  getApproved,
+} from "../../../../chain/hooks/useGrigochkiTokenFunctions";
 import { NFT_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
 import { NFTItem } from "../../../../chain/interfaces/nft-item.interface";
 import {
@@ -23,13 +29,11 @@ const Nft = () => {
   const { account } = useWeb3React<Web3Provider>();
 
   const [NFTs, setNFTs] = useState<NFTItem[]>([]);
+  const [lastClaim, setLastClaim] = useState<Date>(new Date());
 
   useEffect(() => {
     if (account && NFTContract) {
       getUserNFTs();
-      if (StakingContract) {
-        NFTM(StakingContract, account);
-      }
     }
   }, [account, NFTContract]);
 
@@ -37,12 +41,35 @@ const Nft = () => {
     setNFTs([]);
     getUserNFTs();
   };
+
   const getUserNFTs = async () => {
+    if (StakingContract) {
+      setLastClaim(new Date((await NFTM(StakingContract, account!)) * 1000));
+    }
+
     const userNFTs = await getNftsForOwner(NFTContract!, account!);
     if (userNFTs) {
       console.log(userNFTs);
       setNFTs(userNFTs);
+      checkApproved(userNFTs);
     }
+  };
+
+  const checkApproved = async (userNFTs: NFTItem[]) => {
+    for await (const item of userNFTs) {
+      const tx = await getApproved(
+        NFTContract!,
+        Number(item.tokenId),
+        await getTransactionOptions(account!)
+      );
+
+      if (tx?.toLowerCase() == NFT_STAKING_CONTRACT_ADDRESS.toLowerCase()) {
+        item.isApproved = true;
+      } else {
+        item.isApproved = false;
+      }
+    }
+    setNFTs(userNFTs);
   };
 
   const approveNFT = async (tokenId: number) => {
@@ -97,7 +124,10 @@ const Nft = () => {
             {NFTs.map((nft, index) => {
               if (index % 2 == 0) {
                 return (
-                  <div className={classes.nft__content_col_grayRow}>
+                  <div
+                    key={nft.tokenId}
+                    className={classes.nft__content_col_grayRow}
+                  >
                     <>#{nft.tokenId}</>
                     <Button onClick={() => onNFTClick(nft)}>
                       {nft.isApproved ? "STAKE" : "APROVE"}
@@ -106,7 +136,10 @@ const Nft = () => {
                 );
               } else {
                 return (
-                  <div className={classes.nft__content_col_whiteRow}>
+                  <div
+                    key={nft.tokenId}
+                    className={classes.nft__content_col_whiteRow}
+                  >
                     <>#{nft.tokenId}</>
                     <Button onClick={() => onNFTClick(nft)}>
                       {nft.isApproved ? "STAKE" : "APROVE"}
@@ -127,22 +160,12 @@ const Nft = () => {
             </div>
           </div>
           <div className={classes.nft__content_col}>
-            <>YOU STAKED</>{" "}
+            <>CLAIM INFO</>{" "}
             <div className={classes.nft__content_col_whiteRow}>
-              <>#314</>
-              <Button>UNSTAKE</Button>
+              <>YOUR LAST CLAIM </>{" "}
             </div>
             <div className={classes.nft__content_col_grayRow}>
-              <>#69</>
-              <Button>UNSTAKE</Button>
-            </div>
-            <div className={classes.nft__content_col_whiteRow}>
-              <>#5</>
-              <Button>UNSTAKE</Button>
-            </div>
-            <div className={classes.nft__content_col_grayRow}>
-              <>#3333</>
-              <Button>UNSTAKE</Button>
+              {lastClaim.toLocaleDateString()}
             </div>
             <div className={classes.nft__content_col_unstake}>
               <Button onClick={() => onUnstakeAllClick()}> UNSTAKE ALL </Button>

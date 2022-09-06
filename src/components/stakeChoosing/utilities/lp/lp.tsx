@@ -11,19 +11,15 @@ import {
   getTransactionOptions,
   weiToEther,
 } from "../../../../chain/tools/chain-utils";
-import {
-  LP_STAKING_CONTRACT_ADDRESS,
-  LP_TOKEN_ADDRESS,
-} from "../../../../chain/constances";
+import { LP_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
 
 const Lp = () => {
   const { account } = useWeb3React<Web3Provider>();
-
-  const [userLPBalance, setUserLPBalance] = useState(0);
   const LpToken = useLPTokenContract();
   const LPStakeContract = useLPStakingContract();
-  const [stakeButtonText, setStakeButtonText] = useState("APPROVE");
 
+  const [userLPBalance, setUserLPBalance] = useState(0);
+  const [stakeButtonText, setStakeButtonText] = useState("APPROVE");
   const [stakeInfo, setStakeInfo] = useState<{
     period: number;
     amount: number;
@@ -37,6 +33,10 @@ const Lp = () => {
     }
   }, [account]);
 
+  useEffect(() => {
+    checkStakeButtonText();
+  }, [stakeInfo]);
+
   const getUserAllowance = async () => {
     const allowance = await LpToken!.allowance(
       account!,
@@ -44,6 +44,7 @@ const Lp = () => {
     );
     setStakeInfo({ ...stakeInfo, allowance: Number(weiToEther(allowance)) });
   };
+
   const getUserLP = async () => {
     const balance = await LpToken!.balanceOf(account!);
 
@@ -52,7 +53,6 @@ const Lp = () => {
   };
 
   const checkStakeButtonText = (): boolean => {
-    console.log(stakeInfo.amount > stakeInfo.allowance);
     if (stakeInfo.amount > stakeInfo.allowance) {
       setStakeButtonText("APPROVE");
       return false;
@@ -62,9 +62,6 @@ const Lp = () => {
     }
   };
 
-  useEffect(() => {
-    checkStakeButtonText();
-  }, [stakeInfo]);
   const onEnterStakingAmount = (value: number) => {
     if (value > stakeInfo.allowance) {
       setStakeInfo({ ...stakeInfo, amount: value });
@@ -79,17 +76,18 @@ const Lp = () => {
 
   const doStake = async (duration: number) => {
     const check = checkStakeButtonText();
-    console.log("check", check);
+    const val = etherToWei(stakeInfo.amount);
     if (check) {
-      LPStakeContract?.deposit(
+      const t = await LPStakeContract?.deposit(
         etherToWei(stakeInfo.amount),
         duration,
-        await getTransactionOptions(account!, stakeInfo.amount)
+        await getTransactionOptions(account!)
       );
     } else {
       const t = await LpToken?.approve(
         LP_STAKING_CONTRACT_ADDRESS,
-        etherToWei(stakeInfo.amount)
+        etherToWei(stakeInfo.amount),
+        await getTransactionOptions(account!)
       );
       await t?.wait();
       getUserAllowance();
@@ -99,6 +97,7 @@ const Lp = () => {
     if (stakeInfo.amount && stakeInfo.period) {
       switch (stakeInfo.period) {
         case 1:
+          // doStake(1);
           doStake(14787);
 
           break;

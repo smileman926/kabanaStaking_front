@@ -28,26 +28,6 @@ export const getNftsForOwner = async (
         nft.contract.address.toLowerCase() == GRIGOCHKI_ADDRESS.toLowerCase()
     ) as NFTItem[];
 
-    for await (const item of filtered) {
-      console.log("item", item);
-
-      const tx = await getApproved(
-        gToken!,
-        Number(item.tokenId),
-        await getTransactionOptions(account)
-      );
-      console.log("tx", tx);
-      console.log(
-        "tx",
-        tx?.toLowerCase() == NFT_STAKING_CONTRACT_ADDRESS.toLowerCase()
-      );
-      if (tx?.toLowerCase() == NFT_STAKING_CONTRACT_ADDRESS.toLowerCase()) {
-        item.isApproved = true;
-      } else {
-        item.isApproved = false;
-      }
-    }
-
     return filtered;
   } catch (e) {}
   return null;
@@ -112,15 +92,12 @@ export const getTransactionOptions = async (
   let overrides = {
     gasLimit: gasLimit,
     gasPrice: gasPrice,
-    nonce: n,
+    // nonce: n,
   };
 
-  console.log("getTransactionOptions value", value);
   if (value != 0) {
-    const pure = Number(etherToWei(value)) + gasLimit * gasPrice;
+    const pure = etherToWei(value).add(gasLimit * gasPrice);
     overrides["value"] = pure;
-    console.log("getTransactionOptions", pure);
   }
-
   return overrides;
 };

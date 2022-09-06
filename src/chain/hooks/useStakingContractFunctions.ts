@@ -8,14 +8,11 @@ export const stake = async (
   account: string
 ) => {
   try {
-    console.log("Staking");
-    console.log("Staking tokenIds", tokenIds);
     const tx = await staking.stake(
       tokenIds,
       await getTransactionOptions(account)
     );
     const txResponse = await tx.wait();
-    console.log("Staking txResponse", txResponse);
 
     return txResponse;
   } catch (e) {}
@@ -36,16 +33,18 @@ export const unstake = async (
   } catch (e) {}
 };
 
-export const NFTM = async (staking: Staking, account: string) => {
+export const NFTM = async (
+  staking: Staking,
+  account: string
+): Promise<number> => {
   try {
     const tx = await staking.NFTM(
       account,
       await getTransactionOptions(account)
     );
-    // const txResponse = await tx.wait();
-    console.log("NFTM", tx);
-    return tx;
+    return Number(tx.lastClaim);
   } catch (e) {}
+  return 0;
 };
 
 export const unstakeAll = async (staking: Staking, account: string) => {
