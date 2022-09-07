@@ -36,15 +36,16 @@ export const unstake = async (
 export const NFTM = async (
   staking: Staking,
   account: string
-): Promise<number> => {
+): Promise<[number, number]> => {
   try {
     const tx = await staking.NFTM(
       account,
       await getTransactionOptions(account)
     );
-    return Number(tx.lastClaim);
+    console.log(tx);
+    return [Number(tx.lastClaim), Number(tx.amountStaked)];
   } catch (e) {}
-  return 0;
+  return [0, 0];
 };
 
 export const unstakeAll = async (staking: Staking, account: string) => {

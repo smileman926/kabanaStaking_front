@@ -12,11 +12,13 @@ import {
   weiToEther,
 } from "../../../../chain/tools/chain-utils";
 import { LP_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
+import useUNIV2TokenContract from "../../../../chain/hooks/useUniV2Contract";
 
 const Lp = () => {
   const { account } = useWeb3React<Web3Provider>();
   const LpToken = useLPTokenContract();
   const LPStakeContract = useLPStakingContract();
+  const UNI_V2 = useUNIV2TokenContract();
 
   const [userLPBalance, setUserLPBalance] = useState(0);
   const [stakeButtonText, setStakeButtonText] = useState("APPROVE");
@@ -38,7 +40,7 @@ const Lp = () => {
   }, [stakeInfo]);
 
   const getUserAllowance = async () => {
-    const allowance = await LpToken!.allowance(
+    const allowance = await UNI_V2!.allowance(
       account!,
       LP_STAKING_CONTRACT_ADDRESS
     );
@@ -46,7 +48,7 @@ const Lp = () => {
   };
 
   const getUserLP = async () => {
-    const balance = await LpToken!.balanceOf(account!);
+    const balance = await UNI_V2!.balanceOf(account!);
 
     // weiToEther(balance)
     setUserLPBalance(Number(weiToEther(balance)));
@@ -84,7 +86,7 @@ const Lp = () => {
         await getTransactionOptions(account!)
       );
     } else {
-      const t = await LpToken?.approve(
+      const t = await UNI_V2?.approve(
         LP_STAKING_CONTRACT_ADDRESS,
         etherToWei(stakeInfo.amount),
         await getTransactionOptions(account!)

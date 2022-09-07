@@ -29,7 +29,10 @@ const Nft = () => {
   const { account } = useWeb3React<Web3Provider>();
 
   const [NFTs, setNFTs] = useState<NFTItem[]>([]);
-  const [lastClaim, setLastClaim] = useState<Date>(new Date());
+  const [stakedNFTInfo, setStakedNFTInfo] = useState({
+    amountStaked: 0,
+    lastClaim: new Date(),
+  });
 
   useEffect(() => {
     if (account && NFTContract) {
@@ -44,7 +47,12 @@ const Nft = () => {
 
   const getUserNFTs = async () => {
     if (StakingContract) {
-      setLastClaim(new Date((await NFTM(StakingContract, account!)) * 1000));
+      const [lastClaim, amountStaked] = await NFTM(StakingContract, account!);
+
+      setStakedNFTInfo({
+        amountStaked,
+        lastClaim: new Date(Number(lastClaim) * 1000),
+      });
     }
 
     const userNFTs = await getNftsForOwner(NFTContract!, account!);
@@ -165,7 +173,13 @@ const Nft = () => {
               <>YOUR LAST CLAIM </>{" "}
             </div>
             <div className={classes.nft__content_col_grayRow}>
-              {lastClaim.toLocaleDateString()}
+              {stakedNFTInfo.lastClaim.toLocaleDateString()}
+            </div>
+            <div className={classes.nft__content_col_whiteRow}>
+              <>MUSHROOMS STAKED</>
+            </div>
+            <div className={classes.nft__content_col_grayRow}>
+              {stakedNFTInfo.amountStaked}
             </div>
             <div className={classes.nft__content_col_unstake}>
               <Button onClick={() => onUnstakeAllClick()}> UNSTAKE ALL </Button>

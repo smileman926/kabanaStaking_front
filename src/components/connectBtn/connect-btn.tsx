@@ -37,7 +37,7 @@ const ConnectBtn = () => {
     );
   }
   if (error) {
-    return <div>Wrong Network</div>;
+    return <Button>Wrong Network</Button>;
   }
 
   if (!account) {
