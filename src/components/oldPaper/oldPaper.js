@@ -1,7 +1,7 @@
 import classes from "./oldPaper.module.scss";
 
 const OldPaper = () => {
-  const rows = ["Mushroom", "Club Coin", "dNuts", "Offers", "Wins"];
+  const rows = ["Mushroom", "Club Coin", "ClubToken", "Offers", "Wins"];
 
   return (
     <div className={classes.oldPaper}>
