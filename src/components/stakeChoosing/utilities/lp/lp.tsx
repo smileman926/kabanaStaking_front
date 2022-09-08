@@ -100,16 +100,16 @@ const Lp = () => {
       switch (stakeInfo.period) {
         case 1:
           // doStake(1);
-          doStake(14787);
+          doStake(0);
 
           break;
 
         case 2:
-          doStake(29574);
+          doStake(1);
           break;
 
         case 3:
-          doStake(44361);
+          doStake(2);
           break;
 
         default:

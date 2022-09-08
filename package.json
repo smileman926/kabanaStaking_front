@@ -2,7 +2,7 @@
   "name": "web-stake",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://test.kabana.club",
+  "homepage": "https://kabana.mineman.ir",
   "dependencies": {
     "@ethersproject/providers": "^5.7.0",
     "@metamask/detect-provider": "^1.2.0",
