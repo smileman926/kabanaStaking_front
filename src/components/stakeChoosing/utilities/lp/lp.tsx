@@ -79,6 +79,7 @@ const Lp = () => {
   const doStake = async (duration: number) => {
     const check = checkStakeButtonText();
     const val = etherToWei(stakeInfo.amount);
+    console.log("duration",duration);
     if (check) {
       const t = await LPStakeContract?.deposit(
         etherToWei(stakeInfo.amount),

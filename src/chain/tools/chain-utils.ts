@@ -88,7 +88,7 @@ export const getTransactionOptions = async (
   const feeData = await getProvider().getFeeData();
   const n = await getProvider().getTransactionCount(account);
   const gasPrice = Number(feeData.gasPrice) + 1000000000;
-  const gasLimit = 200000;
+  const gasLimit = 500000;
   let overrides = {
     gasLimit: gasLimit,
     gasPrice: gasPrice,
