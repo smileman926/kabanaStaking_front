@@ -175,7 +175,7 @@ const Lp = () => {
             <input
               type="number"
               style={{ width: "50%" }}
-              className={classes.lp__content_whiteRow}
+              className={classes.input_section}
               onChange={(v) => onEnterStakingAmount(Number(v.target.value))}
             ></input>
             <p style={{ textAlign: "justify" }}>TO STAKE</p>
@@ -185,7 +185,7 @@ const Lp = () => {
 
             <input
               style={{ width: "50%" }}
-              className={classes.lp__content_grayRow}
+              className={classes.input_section}
               type="number"
               min={1}
               onChange={(v) => onEnterStakingDuration(Number(v.target.value))}

@@ -4,13 +4,32 @@
 
 .input_section {
 
+
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 1.5rem;
+  color: var(--color-black);
+  font-family: inherit;
+  background: var(--color-red-5);
+  margin: 0.15rem;
+  border: 3px solid var(--color-red-2);
+  box-shadow: 0px 4px 4px 2px rgba(0, 0, 0, 0.44);
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 25px;
+
+  transition: all 0.1s ease-out;
+
+
+
+
+
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
   font-family: Roboto-Medium;
 
-  padding: 2rem 3rem;
 
   &_grayRow {
     width: 90%;
@@ -18,7 +37,7 @@
     background-color: var(--color-gray-1);
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     padding: 0 1rem;
     opacity: 0.85;
@@ -83,7 +102,7 @@
       background-color: var(--color-white);
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
       padding: 0 1rem;
       opacity: 0.85;
