@@ -9,6 +9,7 @@ import useLPStakingContract from "../../../../chain/hooks/useLPStakingContract";
 import {
   etherToWei,
   getTransactionOptions,
+  showTransactionError,
   weiToEther,
 } from "../../../../chain/tools/chain-utils";
 import { LP_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
@@ -72,20 +73,43 @@ const Lp = () => {
     }
   };
 
+  const onEnterStakingDuration = (value: number) => {
+    if (value > 0) {
+      setStakeInfo({ ...stakeInfo, period: value - 1 });
+    }
+  };
+
   const onSelectPeriodClick = (value: number) => {
     setStakeInfo({ ...stakeInfo, period: value });
   };
 
+  function hex_to_ascii(str1) {
+    var hex = str1.toString();
+    var str = "";
+    for (var n = 0; n < hex.length; n += 2) {
+      str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+    }
+    return str;
+  }
+
   const doStake = async (duration: number) => {
     const check = checkStakeButtonText();
-    const val = etherToWei(stakeInfo.amount);
-    console.log("duration",duration);
+    // const val = etherToWei(stakeInfo.amount);
+    // console.log("duration", duration);
     if (check) {
-      const t = await LPStakeContract?.deposit(
-        etherToWei(stakeInfo.amount),
-        duration,
-        await getTransactionOptions(account!)
-      );
+      try {
+        const t = await LPStakeContract?.deposit(
+          etherToWei(stakeInfo.amount),
+          duration,
+          await getTransactionOptions(account!)
+        );
+        const r = await t?.wait();
+      } catch (e) {
+        console.log(e.error);
+        // let reason = hex_to_ascii(e.toString().substring(138))
+        // console.log('revert reason:', reason)
+        // showTransactionError(e)
+      }
     } else {
       const t = await UNI_V2?.approve(
         LP_STAKING_CONTRACT_ADDRESS,
@@ -97,34 +121,42 @@ const Lp = () => {
     }
   };
   const onStakeClick = async () => {
-    if (stakeInfo.amount && stakeInfo.period) {
-      switch (stakeInfo.period) {
-        case 1:
-          // doStake(1);
-          doStake(0);
+    console.log(stakeInfo.amount);
+    console.log(stakeInfo.period);
+    if (stakeInfo.amount && stakeInfo.period != undefined) {
+      doStake(stakeInfo.period);
+      // switch (stakeInfo.period) {
+      //   case 1:
+      //     // doStake(1);
+      //     doStake(0);
 
-          break;
+      //     break;
 
-        case 2:
-          doStake(1);
-          break;
+      //   case 2:
+      //     doStake(1);
+      //     break;
 
-        case 3:
-          doStake(2);
-          break;
+      //   case 3:
+      //     doStake(2);
+      //     break;
 
-        default:
-          break;
-      }
+      //   default:
+      //     break;
+      // }
     } else {
       alert("Please enter amount and select period");
     }
   };
 
   const onClaimClick = async () => {
-    const tx = await LPStakeContract?.withdraw(
-      await getTransactionOptions(account!)
-    );
+    try {
+      const tx = await LPStakeContract?.withdraw(
+        await getTransactionOptions(account!)
+      );
+      await tx?.wait();
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <StakeCard>
@@ -136,22 +168,29 @@ const Lp = () => {
           <div className={classes.lp__content_grayRow}>
             <p>YOU HAVE {userLPBalance} LP TOKENS</p>
           </div>
-          <div className={classes.lp__content_whiteRow}>
-            <p>
-              <input
-                type="number"
-                onChange={(v) => onEnterStakingAmount(Number(v.target.value))}
-              ></input>
-              TO STAKE
-            </p>
+          <div
+            style={{ flexDirection: "row" }}
+            className={classes.lp__content_whiteRow}
+          >
+            <input
+              type="number"
+              style={{ width: "50%" }}
+              className={classes.lp__content_whiteRow}
+              onChange={(v) => onEnterStakingAmount(Number(v.target.value))}
+            ></input>
+            <p style={{ textAlign: "justify" }}>TO STAKE</p>
           </div>
-          <div className={classes.lp__content_grayRow}>
-            <p>
-              WHAT PERIOD:
-              <Button onClick={() => onSelectPeriodClick(1)}>1</Button>
-              <Button onClick={() => onSelectPeriodClick(2)}>2</Button>
-              <Button onClick={() => onSelectPeriodClick(3)}>3</Button> DAYS
-            </p>
+          <div className={classes.input_section_grayRow}>
+            <p>WHAT PERIOD:</p>
+
+            <input
+              style={{ width: "50%" }}
+              className={classes.lp__content_grayRow}
+              type="number"
+              min={1}
+              onChange={(v) => onEnterStakingDuration(Number(v.target.value))}
+            ></input>
+            <p>DAYS</p>
           </div>
           <div
             style={{

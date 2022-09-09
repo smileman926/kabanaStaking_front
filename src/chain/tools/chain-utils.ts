@@ -101,3 +101,16 @@ export const getTransactionOptions = async (
   }
   return overrides;
 };
+
+export const showTransactionError = (e: any) => {
+  console.error("showError", e);
+  let message = "";
+  if (e.error) {
+    let err = e.error.message.split("reverted:");
+    message = err[1];
+  } else if (e.message) {
+    message = e.message;
+  }
+
+  alert(`Revert >> ${message}`);
+};
