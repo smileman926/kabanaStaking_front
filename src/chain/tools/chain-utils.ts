@@ -43,6 +43,16 @@ export const connectMetamaskOnLoad = () => {
   return false;
 };
 
+export const connectWalletConnectOnLoad = () => {
+  const isConnected = localStorage.getItem("wallet-connect-connected");
+  if (isConnected) {
+    const c = isConnected as unknown as boolean;
+    return c;
+  }
+
+  return false;
+};
+
 export const setMetamaskConnectionStatus = (
   s: "connected" | "disconnected"
 ) => {
@@ -52,6 +62,17 @@ export const setMetamaskConnectionStatus = (
     localStorage.setItem("metamask-connected", "false");
   }
 };
+
+export const setWalletConnectConnectionStatus = (
+  s: "connected" | "disconnected"
+) => {
+  if (s == "connected") {
+    localStorage.setItem("wallet-connect-connected", "true");
+  } else {
+    localStorage.setItem("wallet-connect-connected", "false");
+  }
+};
+
 export const weiToEther = (amount: BigNumber): string => {
   const res = ethers.utils.formatEther(amount);
   return res;

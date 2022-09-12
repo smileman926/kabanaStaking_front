@@ -129,33 +129,35 @@ const Nft = () => {
         <div className={classes.nft__content}>
           <div className={classes.nft__content_col}>
             <>YOU HAVE</>
-            {NFTs.map((nft, index) => {
-              if (index % 2 == 0) {
-                return (
-                  <div
-                    key={nft.tokenId}
-                    className={classes.nft__content_col_grayRow}
-                  >
-                    <>#{nft.tokenId}</>
-                    <Button onClick={() => onNFTClick(nft)}>
-                      {nft.isApproved ? "STAKE" : "APROVE"}
-                    </Button>
-                  </div>
-                );
-              } else {
-                return (
-                  <div
-                    key={nft.tokenId}
-                    className={classes.nft__content_col_whiteRow}
-                  >
-                    <>#{nft.tokenId}</>
-                    <Button onClick={() => onNFTClick(nft)}>
-                      {nft.isApproved ? "STAKE" : "APROVE"}
-                    </Button>
-                  </div>
-                );
-              }
-            })}
+            <div className={classes.scroll}>
+              {NFTs.map((nft, index) => {
+                if (index % 2 == 0) {
+                  return (
+                    <div
+                      key={nft.tokenId}
+                      className={classes.nft__content_col_grayRow}
+                    >
+                      <>#{nft.tokenId}</>
+                      <Button onClick={() => onNFTClick(nft)}>
+                        {nft.isApproved ? "STAKE" : "APROVE"}
+                      </Button>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div
+                      key={nft.tokenId}
+                      className={classes.nft__content_col_whiteRow}
+                    >
+                      <>#{nft.tokenId}</>
+                      <Button onClick={() => onNFTClick(nft)}>
+                        {nft.isApproved ? "STAKE" : "APROVE"}
+                      </Button>
+                    </div>
+                  );
+                }
+              })}
+            </div>
 
             <div className={classes.nft__content_col_claim}>
               <Button

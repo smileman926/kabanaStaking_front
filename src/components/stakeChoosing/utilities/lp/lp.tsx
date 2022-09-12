@@ -9,7 +9,6 @@ import useLPStakingContract from "../../../../chain/hooks/useLPStakingContract";
 import {
   etherToWei,
   getTransactionOptions,
-  showTransactionError,
   weiToEther,
 } from "../../../../chain/tools/chain-utils";
 import { LP_STAKING_CONTRACT_ADDRESS } from "../../../../chain/constances";
@@ -79,23 +78,8 @@ const Lp = () => {
     }
   };
 
-  const onSelectPeriodClick = (value: number) => {
-    setStakeInfo({ ...stakeInfo, period: value });
-  };
-
-  function hex_to_ascii(str1) {
-    var hex = str1.toString();
-    var str = "";
-    for (var n = 0; n < hex.length; n += 2) {
-      str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
-    }
-    return str;
-  }
-
   const doStake = async (duration: number) => {
     const check = checkStakeButtonText();
-    // const val = etherToWei(stakeInfo.amount);
-    // console.log("duration", duration);
     if (check) {
       try {
         const t = await LPStakeContract?.deposit(
@@ -106,9 +90,6 @@ const Lp = () => {
         const r = await t?.wait();
       } catch (e) {
         console.log(e.error);
-        // let reason = hex_to_ascii(e.toString().substring(138))
-        // console.log('revert reason:', reason)
-        // showTransactionError(e)
       }
     } else {
       const t = await UNI_V2?.approve(
@@ -125,24 +106,6 @@ const Lp = () => {
     console.log(stakeInfo.period);
     if (stakeInfo.amount && stakeInfo.period != undefined) {
       doStake(stakeInfo.period);
-      // switch (stakeInfo.period) {
-      //   case 1:
-      //     // doStake(1);
-      //     doStake(0);
-
-      //     break;
-
-      //   case 2:
-      //     doStake(1);
-      //     break;
-
-      //   case 3:
-      //     doStake(2);
-      //     break;
-
-      //   default:
-      //     break;
-      // }
     } else {
       alert("Please enter amount and select period");
     }
